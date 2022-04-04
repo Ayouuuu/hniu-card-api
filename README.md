@@ -54,6 +54,25 @@ http://127.0.0.1:8000/info
 请求头 
 Cookie: 你复制的 cookie 值
 ```
+返回
+```json
+{
+  "name": "",
+  "sex": "",
+  "partment": "",
+  "identity": "",
+  "userId": "",
+  "cardNum": "",
+  "cardId": "",
+  "money": "",
+  "date": "",
+  "status": "",
+  "certCode": "",
+  "cardType": "",
+  "certType": "",
+  "createTime": 1649074521
+}
+```
 获取楼栋号列表
 ```text
 http://127.0.0.1:8000/selfhelp/areas
@@ -61,12 +80,39 @@ http://127.0.0.1:8000/selfhelp/areas
 请求头
 Cookie: 你复制的 cookie 值
 ```
+返回
+```json
+[
+  {
+    "id": "001005",
+    "name": "10号楼"
+  },
+  {
+    "id": "001006",
+    "name": "23号楼"
+  }
+]
+```
+
 获取楼层号列表
 ```text
 http://127.0.0.1:8000/selfhelp/houses?area_id=楼栋号id
 
 请求头
 Cookie: 你复制的 cookie 值
+```
+返回
+```json
+[
+  {
+    "id": "001005002",
+    "name": "2楼"
+  },
+  {
+    "id": "001005003",
+    "name": "3楼"
+  }
+]
 ```
 获取当前楼层所有房间信息
 ```text
@@ -75,4 +121,17 @@ http://127.0.0.1:8000/selfhelp/rooms?area_id=楼栋号id&house_id=楼层号id
 请求头
 Cookie: 你复制的 cookie 值
 ```
-
+```json
+[
+  {
+    "id": "10-601",
+    "money": 78.34,
+    "name": "10-601"
+  },
+  {
+    "id": "10-602",
+    "money": 54.14,
+    "name": "10-602"
+  }
+]
+```
