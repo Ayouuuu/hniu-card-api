@@ -13,7 +13,7 @@ _该脚本仅适用于 **HNIU** 校园一卡通服务_
 下载项目
 
 ```shell
-git clone
+git clone https://github.com/Ayouuuu/hniu-card-api.git
 cd hniu-card-api
 ```
 
