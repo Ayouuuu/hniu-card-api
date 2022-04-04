@@ -121,6 +121,7 @@ http://127.0.0.1:8000/selfhelp/rooms?area_id=楼栋号id&house_id=楼层号id
 请求头
 Cookie: 你复制的 cookie 值
 ```
+返回
 ```json
 [
   {
