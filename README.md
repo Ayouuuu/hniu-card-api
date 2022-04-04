@@ -37,14 +37,42 @@ pip install uvicorn
 pip install uvicorn[standard]
 ```
 
-## 项目地址
-
-```text
-http://127.0.0.1:8000
-```
+## 接口使用
 
 文档地址
 
 ```text
 http://127.0.0.1:8000/docs
+http://127.0.0.1:8000/redoc
 ```
+
+登陆 [一卡通](http://10.14.0.124/zytk35portal/Cardholder/Cardholder.aspx) 按 F12 进入网页控制台，点击 Network(网络) 找到 `Cardholder.aspx` 文件 `Headers->Request Headers->Cookie` 然后复制
+获取用户信息
+```text
+http://127.0.0.1:8000/info
+
+请求头 
+Cookie: 你复制的 cookie 值
+```
+获取楼栋号列表
+```text
+http://127.0.0.1:8000/selfhelp/areas
+
+请求头
+Cookie: 你复制的 cookie 值
+```
+获取楼层号列表
+```text
+http://127.0.0.1:8000/selfhelp/houses?area_id=楼栋号id
+
+请求头
+Cookie: 你复制的 cookie 值
+```
+获取当前楼层所有房间信息
+```text
+http://127.0.0.1:8000/selfhelp/rooms?area_id=楼栋号id&house_id=楼层号id
+
+请求头
+Cookie: 你复制的 cookie 值
+```
+
