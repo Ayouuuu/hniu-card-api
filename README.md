@@ -1,7 +1,8 @@
 # HNIU 校园一卡通API
-![GitHub](https://img.shields.io/github/license/Ayouuuu/hniu-card-api?color=green&style=flat-square)
-![Forks](https://img.shields.io/github/forks/Ayouuuu/hniu-card-api?color=green&style=flat-square)
-![Stars](https://img.shields.io/github/stars/Ayouuuu/hniu-card-api?color=green&style=flat-square)
+![license](https://img.shields.io/github/license/Ayouuuu/hniu-card-api?color=green&style=for-the-badge)
+![Forks](https://img.shields.io/github/forks/Ayouuuu/hniu-card-api?color=green&style=for-the-badge)
+![Stars](https://img.shields.io/github/stars/Ayouuuu/hniu-card-api?color=green&style=for-the-badge)
+![Watchers](https://img.shields.io/github/watchers/Ayouuuu/hniu-card-api?color=green&style=for-the-badge)
 
 _该脚本仅适用于 **HNIU** 校园一卡通服务_   
 基于 **Python FastAPI** HNIU 校园一卡通 API 后端
