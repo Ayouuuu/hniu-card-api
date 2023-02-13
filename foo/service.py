@@ -103,6 +103,5 @@ def get_rooms(area_id, house_id, cookie):
             'id': arr[0],
             'money': arr[1],
             'id': arr[2],
-            'name': arr[3]
         })
     return array

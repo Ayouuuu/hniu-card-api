@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Header, Query
 
 from typing import Optional
+from starlette.responses import Response
 from foo.service import *
 
 app = FastAPI()
@@ -8,9 +9,10 @@ app = FastAPI()
 "获取用户信息"
 
 
-@app.get("/info", description="获取用户信息")
-async def info(Cookie: Optional[str] = Header(None)):
-    return get_user_info(Cookie)
+@app.get("/info", description="获取用户信息，初始化 cookie ")
+async def info(response: Response, cookie: Optional[str]):
+    response.set_cookie(key="ASP.NET_SessionId", value=cookie)
+    return get_user_info("ASP.NET_SessionId=" + cookie)
 
 
 "获取楼栋号列表"
