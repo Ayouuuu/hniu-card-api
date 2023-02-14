@@ -20,18 +20,18 @@ url = [
 ]
 
 
-# async def authcode(cookie: Optional[str] = Header(None)):
-#     headers = {
-#         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-#         "Accept-Encoding": "gzip, deflate",
-#         "Cookie": cookie
-#     }
-#     response = requests.get(url[0], headers=headers, stream=True)
-#     with open('test2.png', 'wb') as file:
-#         for data in response.iter_content(128):
-#             file.write(data)
-#     print(response.status_code)
-#     return response.status_code
+async def authcode(cookie: str):
+    headers = {
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+        "Accept-Encoding": "gzip, deflate",
+        "Cookie": cookie
+    }
+    response = requests.get(url[0], headers=headers, stream=True)
+    with open('test2.png', 'wb') as file:
+        for data in response.iter_content(128):
+            file.write(data)
+    print(response.status_code)
+    return response.status_code
 
 def get_user_info(cookie: str):
     headers = {
