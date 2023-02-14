@@ -13,8 +13,8 @@ app = FastAPI()
 async def login(response: Response, username: str, password: str):
     code = authcode()
     response.set_cookie(key=KEY, value=code[1])
-    auth_login(username, password, code[0], KEY + "=" + code[1])
-    return {"message": "成功登陆", "cookie": code[1]}
+    info = auth_login(username, password, code[0], KEY + "=" + code[1])
+    return {"userinfo": info, "cookie": code[1]}
 
 
 "获取用户信息"

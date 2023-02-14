@@ -11,6 +11,7 @@ import ujson
 个人信息
 自助缴费
 费用查询
+登陆
 """
 url = [
     "http://10.14.0.124/zytk35portal/AuthCode.aspx",
@@ -36,7 +37,6 @@ def authcode():
     with open('code.png', 'wb') as file:
         for data in response.iter_content(128):
             file.write(data)
-    # response.cookies.set_cookie(key=KEY, value=response.cookies.get(KEY))
     return [ocr_code("code.png").upper(), response.cookies.get(KEY)]
 
 
@@ -52,7 +52,8 @@ def auth_login(username: str, password: str, code: str, cookie: str):
     }
     response = requests.post(url[4], headers=headers,
                              data="__EVENTTARGET=UserLogin%24ImageButton1&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwUKMTc0MDQ4ODc3Nw9kFgICAQ9kFhICAw8WAh4HVmlzaWJsZWhkAgUPFgIfAGhkAgcPFgIfAGhkAgkPPCsACQEADxYEHghEYXRhS2V5cxYAHgtfIUl0ZW1Db3VudGZkZAIODzwrAAkBAA8WBB8BFgAfAmZkZAIQDzwrAAkBAA8WBB8BFgAfAmZkZAISDzwrAAkBAA8WBB8BFgAfAmZkZAIUDzwrAAkBAA8WBB8BFgAfAmZkZAIWDzwrAAkBAA8WBB8BFgAfAmZkZGT7t2PaAC71nhjomcWWlS2Kl%2FDh6Icnffmmf1QCBjcqOg%3D%3D&__VIEWSTATEGENERATOR=E655DDB2&__EVENTVALIDATION=%2FwEdAAmmkB23XPRc6QJjrAxJx7jUohjo8sIky4Xs%2BCUBsum%2BnL6pRh%2FvC3eYiguVzFy%2FtEYvT53BE9ULYNj8jfQiCQeC35ZbbeGbJddowj1pY7sNivrI0G85IvfKPX4CghIMZ1NJ4PbCb80KUDHFYYKXgFT9PjMyUg6NAZP4%2BvrIPkQUuFOdcKl43UA3HbIoQpEPelhEPm0OSqwYeIaEyD7zfAzjHEWZ1PjzcAqdQtFUyg1jBg%3D%3D&UserLogin%3AtxtUser=" + username + "&UserLogin%3AtxtPwd=" + password + "&UserLogin%3AddlPerson=%BF%A8%BB%A7&UserLogin%3AtxtSure=" + code)
-    return response.status_code
+    info = get_user_info(cookie)
+    return info
 
 
 "获取用户信息"
@@ -75,7 +76,6 @@ def get_areas(cookie: str):
     }
     response = requests.get(url[2], headers=headers)
     doc = pq(response.text)
-    # doc = pq(filename=".idea/httpRequests/2022-04-04T143732.200.html")
     areas = doc.find("#lsArea").items("option")
     arr = []
     for area in areas:
@@ -123,10 +123,21 @@ def get_rooms(area_id, house_id, cookie):
         "new Ajax.Web.DataSet([new Ajax.Web.DataTable([[\"MeterID\",\"System.Int32\"],[\"Remnant\",\"System.Decimal\"],[\"showname\",\"System.String\"],[\"room_id\",\"System.String\"]],",
         "").replace(")]);/*", ""))
     array = []
+    total_money = 0
     for arr in text:
         array.append({
             'id': arr[0],
             'money': arr[1],
             'id': arr[2],
         })
-    return array
+        money = int(arr[1])
+        if money >= -10 and not str(arr[2]).startswith("WC"):
+            total_money += money
+    data = {
+        "area_id": area_id,
+        "house_id": house_id,
+        "create_time": int(round(time.time() * 1000)),
+        "total_money": total_money,
+        "rooms": array
+    }
+    return data
