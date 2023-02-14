@@ -6,13 +6,23 @@ from foo.service import *
 
 app = FastAPI()
 
+"登陆"
+
+
+@app.post("/login", description="登陆,初始化 cookie")
+async def login(response: Response, username: str, password: str):
+    code = authcode()
+    response.set_cookie(key=KEY, value=code[1])
+    auth_login(username, password, code[0], KEY + "=" + code[1])
+    return {"message": "成功登陆", "cookie": code[1]}
+
+
 "获取用户信息"
 
 
 @app.get("/info", description="获取用户信息，初始化 cookie ")
-async def info(response: Response, cookie: Optional[str]):
-    response.set_cookie(key="ASP.NET_SessionId", value=cookie)
-    return get_user_info("ASP.NET_SessionId=" + cookie)
+async def info(Cookie: Optional[str] = Header(None)):
+    return get_user_info(Cookie)
 
 
 "获取楼栋号列表"
