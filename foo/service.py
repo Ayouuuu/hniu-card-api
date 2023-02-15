@@ -1,6 +1,9 @@
+import json
+
 from pyquery import PyQuery as pq
 from foo.pojo.studeninfo import StudentInfo
 from foo.util import ocr_code
+from foo.influxdb import write_point
 
 import requests
 import time
@@ -140,4 +143,5 @@ def get_rooms(area_id, house_id, cookie):
         "total_money": total_money,
         "rooms": array
     }
+    # write_point(json.dumps(data))
     return data

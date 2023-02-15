@@ -14,6 +14,8 @@ async def login(response: Response, username: str, password: str):
     code = authcode()
     response.set_cookie(key=KEY, value=code[1])
     info = auth_login(username, password, code[0], KEY + "=" + code[1])
+    if info['name'] == '':
+        return {"code": 403, "message": "无法获取登陆信息，请再次尝试或等待几分钟"}
     return {"userinfo": info, "cookie": code[1]}
 
 
