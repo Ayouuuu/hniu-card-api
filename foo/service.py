@@ -3,7 +3,7 @@ import json
 from pyquery import PyQuery as pq
 from foo.pojo.studeninfo import StudentInfo
 from foo.util import ocr_code
-from foo.influxdb import write_point
+from foo.influxdb import *
 
 import requests
 import time
@@ -108,7 +108,12 @@ def get_houses(area_id: str, cookie: str):
             'id': arr[0],
             'name': arr[1]
         })
-    return array
+
+    d = {
+        "area_id": area_id,
+        "houses": array
+    }
+    return d
 
 
 def get_rooms(area_id, house_id, cookie):
@@ -126,22 +131,17 @@ def get_rooms(area_id, house_id, cookie):
         "new Ajax.Web.DataSet([new Ajax.Web.DataTable([[\"MeterID\",\"System.Int32\"],[\"Remnant\",\"System.Decimal\"],[\"showname\",\"System.String\"],[\"room_id\",\"System.String\"]],",
         "").replace(")]);/*", ""))
     array = []
-    total_money = 0
     for arr in text:
+        arr[1] = arr[1] if arr[1] is not None else 0
         array.append({
             'id': arr[0],
             'money': arr[1],
             'id': arr[2],
         })
-        money = int(arr[1])
-        if money >= -10 and not str(arr[2]).startswith("WC"):
-            total_money += money
     data = {
         "area_id": area_id,
         "house_id": house_id,
         "create_time": int(round(time.time() * 1000)),
-        "total_money": total_money,
         "rooms": array
     }
-    # write_point(json.dumps(data))
     return data

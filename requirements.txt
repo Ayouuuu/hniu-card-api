@@ -1,7 +1,6 @@
-fastapi==0.75.1
-Pillow==9.1.0
-pyquery==1.4.3
-pytesseract==0.3.9
-requests==2.27.1
-ujson==5.1.0
-uvicorn==0.17.6
+fastapi~=0.75.1
+pyquery~=1.4.3
+requests~=2.27.1
+ujson~=5.1.0
+ddddocr~=1.4.7
+starlette~=0.17.1

@@ -4,6 +4,9 @@ from typing import Optional
 from starlette.responses import Response
 from foo.service import *
 
+import threading
+import time
+
 app = FastAPI()
 
 "登陆"
@@ -51,3 +54,11 @@ async def selfhelp_room(area_id: str = Query(..., description="楼栋号id"),
                         house_id: str = Query(..., description="楼层号id"),
                         Cookie: Optional[str] = Header(None)):
     return get_rooms(area_id, house_id, Cookie)
+
+@app.get("/write/rooms", description="写入当前楼栋所有房间余额")
+async def write_room(area_id: str = Query(..., description="楼栋号id"), Cookie: Optional[str] = Header(None)):
+    houses = get_houses(area_id, Cookie)
+    for house in houses["houses"]:
+        threading.Thread(target=write_point, args=(json.dumps(get_rooms(area_id, house['id'], Cookie)),)).start()
+        time.sleep(1)
+    return {"code": 200, "message": "写入成功"}
