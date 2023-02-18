@@ -11,6 +11,7 @@ _该脚本仅适用于 **HNIU** 校园一卡通服务_
 
 - 获取用户信息
 - 获取各个寝室电费
+- 自动登陆获取电费数据
 - [influxdb2 数据统计](/foo/influxdb.py)
 - [grafana 数据展示](docs/grafana.json)
 
@@ -30,8 +31,7 @@ cd hniu-card-api
 pip install -r requirements.txt
 ```
 
-运行程序
-
+## FastAPI 网页端
 ```shell
 python -m uvicorn main:app --reload
 ```
@@ -43,6 +43,14 @@ python -m uvicorn main:app --reload
 pip install uvicorn
 pip install uvicorn[standard]
 ```
+
+## influxdb2 数据统计
+配置`foo/service.py->account` 账号密码  
+配置`foo/influxdb.py` `bucket` `org` `token` `url` `proxy`  
+运行 `foo/influxdb_schedule.py` 每分钟轮询向 `influxdb` 添加数据
+
+### Grafana 数据展
+导入 [grafana](./docs/grafana.json) 配置文件，自行修改数据源！
 
 ## 接口使用
 
