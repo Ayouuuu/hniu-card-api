@@ -10,12 +10,12 @@ app = FastAPI()
 
 @app.post("/login", description="登陆,初始化 cookie")
 async def login(response: Response, username: str, password: str):
-    code = authcode()
-    response.set_cookie(key=KEY, value=code[1])
-    info = auth_login(username, password, code[0])
+    info = auth_login(username, password)
+    cookie = session.cookies.get(KEY)
+    response.set_cookie(key=KEY, value=cookie)
     if info['name'] == '':
         return {"code": 403, "message": "无法获取登陆信息，请再次尝试或等待几分钟"}
-    return {"userinfo": info, "cookie": code[1]}
+    return {"userinfo": info, "cookie": cookie}
 
 
 "获取用户信息"

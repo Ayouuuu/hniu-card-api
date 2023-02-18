@@ -25,6 +25,8 @@ url = [
 
 KEY = "ASP.NET_SessionId"
 session = requests.Session()
+# 账号,密码
+account = ["", ""]
 
 """
 获取验证码
@@ -48,13 +50,14 @@ def authcode():
 "登陆"
 
 
-def auth_login(username: str, password: str, code: str):
+def auth_login(username: str = account[0], password: str = account[1]):
+    code = authcode()
     headers = {
         "Content-Type": "application/x-www-form-urlencoded",
         "Upgrade-Insecure-Requests": "1",
         "Referer": "http://10.14.0.124/zytk35portal/default.aspx",
     }
-    session.post(url[4], headers=headers, data="__EVENTTARGET=UserLogin%24ImageButton1&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwUKMTc0MDQ4ODc3Nw9kFgICAQ9kFhICAw8WAh4HVmlzaWJsZWhkAgUPFgIfAGhkAgcPFgIfAGhkAgkPPCsACQEADxYEHghEYXRhS2V5cxYAHgtfIUl0ZW1Db3VudGZkZAIODzwrAAkBAA8WBB8BFgAfAmZkZAIQDzwrAAkBAA8WBB8BFgAfAmZkZAISDzwrAAkBAA8WBB8BFgAfAmZkZAIUDzwrAAkBAA8WBB8BFgAfAmZkZAIWDzwrAAkBAA8WBB8BFgAfAmZkZGT7t2PaAC71nhjomcWWlS2Kl%2FDh6Icnffmmf1QCBjcqOg%3D%3D&__VIEWSTATEGENERATOR=E655DDB2&__EVENTVALIDATION=%2FwEdAAmmkB23XPRc6QJjrAxJx7jUohjo8sIky4Xs%2BCUBsum%2BnL6pRh%2FvC3eYiguVzFy%2FtEYvT53BE9ULYNj8jfQiCQeC35ZbbeGbJddowj1pY7sNivrI0G85IvfKPX4CghIMZ1NJ4PbCb80KUDHFYYKXgFT9PjMyUg6NAZP4%2BvrIPkQUuFOdcKl43UA3HbIoQpEPelhEPm0OSqwYeIaEyD7zfAzjHEWZ1PjzcAqdQtFUyg1jBg%3D%3D&UserLogin%3AtxtUser=" + username + "&UserLogin%3AtxtPwd=" + password + "&UserLogin%3AddlPerson=%BF%A8%BB%A7&UserLogin%3AtxtSure=" + code)
+    session.post(url[4], headers=headers, data="__EVENTTARGET=UserLogin%24ImageButton1&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwUKMTc0MDQ4ODc3Nw9kFgICAQ9kFhICAw8WAh4HVmlzaWJsZWhkAgUPFgIfAGhkAgcPFgIfAGhkAgkPPCsACQEADxYEHghEYXRhS2V5cxYAHgtfIUl0ZW1Db3VudGZkZAIODzwrAAkBAA8WBB8BFgAfAmZkZAIQDzwrAAkBAA8WBB8BFgAfAmZkZAISDzwrAAkBAA8WBB8BFgAfAmZkZAIUDzwrAAkBAA8WBB8BFgAfAmZkZAIWDzwrAAkBAA8WBB8BFgAfAmZkZGT7t2PaAC71nhjomcWWlS2Kl%2FDh6Icnffmmf1QCBjcqOg%3D%3D&__VIEWSTATEGENERATOR=E655DDB2&__EVENTVALIDATION=%2FwEdAAmmkB23XPRc6QJjrAxJx7jUohjo8sIky4Xs%2BCUBsum%2BnL6pRh%2FvC3eYiguVzFy%2FtEYvT53BE9ULYNj8jfQiCQeC35ZbbeGbJddowj1pY7sNivrI0G85IvfKPX4CghIMZ1NJ4PbCb80KUDHFYYKXgFT9PjMyUg6NAZP4%2BvrIPkQUuFOdcKl43UA3HbIoQpEPelhEPm0OSqwYeIaEyD7zfAzjHEWZ1PjzcAqdQtFUyg1jBg%3D%3D&UserLogin%3AtxtUser=" + username + "&UserLogin%3AtxtPwd=" + password + "&UserLogin%3AddlPerson=%BF%A8%BB%A7&UserLogin%3AtxtSure=" + code[0])
     info = get_user_info()
     return info
 

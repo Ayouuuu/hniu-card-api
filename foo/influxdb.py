@@ -31,8 +31,11 @@ def write_point(data):
         }
         db_point = Point.from_dict(point, WritePrecision.NS)
         points.append(db_point)
-    write_api.write(bucket=bucket, record=points)
-    print(time.strftime("[%Y-%m-%d %H:%M:%S]", time.localtime()), "successfully write", data["area_id"], "data:", points.__sizeof__())
+    try:
+        write_api.write(bucket=bucket, record=points)
+        print(time.strftime("[%Y-%m-%d %H:%M:%S]", time.localtime()), "successfully write", data["area_id"], "data:", points.__sizeof__())
+    except Exception:
+        print("write failed 请检查您的网络", "area_id: ", data["area_id"], "house_id", data["house_id"])
 
 
 def write_areas(data):
