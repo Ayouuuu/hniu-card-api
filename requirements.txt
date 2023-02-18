@@ -4,3 +4,4 @@ requests~=2.27.1
 ujson~=5.1.0
 ddddocr~=1.4.7
 starlette~=0.17.1
+schedule~=1.1.0
