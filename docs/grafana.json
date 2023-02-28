@@ -45,6 +45,167 @@
             "mode": "absolute",
             "steps": [
               {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "全部楼栋电费"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "总电费"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "欠费楼栋总数"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "总欠费楼栋"
+              },
+              {
+                "id": "decimals"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "总楼栋数"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "总楼栋数"
+              },
+              {
+                "id": "decimals"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "总欠费"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "总欠费"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 7,
+        "x": 7,
+        "y": 0
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "fw_r5ghVk"
+          },
+          "hide": false,
+          "query": "from(bucket: \"hniu\")\n  |> range(start: -2d)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\n  |> filter(fn: (r) => r[\"room_id\"] !~ /^[a-zA-Z*]/)\n  |> filter(fn: (r) => r[\"_value\"] > 0)\n  |> last()\n  |> group(columns: [\"_field\"])\n  |> fill(column: \"_value\", usePrevious: true)  \n  |> sum(column: \"_value\")",
+          "refId": "全部楼栋电费"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "fw_r5ghVk"
+          },
+          "hide": false,
+          "query": "from(bucket: \"hniu\")\r\n  |> range(start: 2023-02-11T22:00:00Z, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\r\n  |> fill(column: \"_value\", usePrevious: true)  \r\n  |> last()\r\n  |> keep(columns: [\"_time\",\"_value\"])\r\n  |> count()\r\n",
+          "refId": "总楼栋数"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "fw_r5ghVk"
+          },
+          "hide": false,
+          "query": "from(bucket: \"hniu\")\r\n  |> range(start: -2d)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\r\n  |> filter(fn: (r) => r[\"room_id\"] !~ /^[a-zA-Z*]/)\r\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\r\n  |> filter(fn: (r) => r[\"_value\"] < 0)\r\n  |> fill(column: \"_value\", usePrevious: true)  \r\n  |> last()\r\n  |> keep(columns: [\"_time\",\"_value\"])\r\n  |> count()",
+          "refId": "欠费楼栋总数"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "fw_r5ghVk"
+          },
+          "hide": false,
+          "query": "from(bucket: \"hniu\")\r\n  |> range(start: -2d)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\r\n  |> filter(fn: (r) => r[\"room_id\"] !~ /^[a-zA-Z*]/)\r\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\r\n  |> filter(fn: (r) => r[\"_value\"] < 0)\r\n  |> fill(column: \"_value\", usePrevious: true)  \r\n  |> last()\r\n  |> keep(columns: [\"_time\",\"_value\"])\r\n  |> sum(column: \"_value\")",
+          "refId": "总欠费"
+        }
+      ],
+      "title": "全局信息",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 4
+      },
+      "id": 12,
+      "panels": [],
+      "title": "${area} 信息",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fw_r5ghVk"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
                 "color": "green",
                 "value": null
               }
@@ -87,6 +248,21 @@
                 "value": "全部楼栋电费"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "欠费楼栋总数"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "总欠费楼栋"
+              },
+              {
+                "id": "decimals"
+              }
+            ]
           }
         ]
       },
@@ -94,11 +270,11 @@
         "h": 11,
         "w": 2,
         "x": 0,
-        "y": 0
+        "y": 5
       },
       "id": 4,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "auto",
@@ -118,7 +294,7 @@
             "type": "influxdb",
             "uid": "fw_r5ghVk"
           },
-          "query": "area=from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"area\")\n  |> unique(column: \"_value\")\n  |> filter(fn: (r) => r[\"_value\"] == \"${area}\")\n  |> findRecord(fn: (key) => key._field == \"name\", idx: 0)\n  \n\n\nfrom(bucket: \"hniu\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\n  |> filter(fn: (r) => r[\"area_id\"] == area.id)\n  |> filter(fn: (r) => r[\"room_id\"] !~ /^[a-zA-Z*]/)\n  |> filter(fn: (r) => r[\"_value\"] >= -10.0)\n  |> last()\n  |> group(columns: [\"_field\"])\n  |> fill(column: \"_value\", usePrevious: true)  \n  |> sum(column: \"_value\")",
+          "query": "area=from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: 2023-02-18T22:00:00Z)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"area\")\n  |> unique(column: \"_value\")\n  |> filter(fn: (r) => r[\"_value\"] == \"${area}\")\n  |> findRecord(fn: (key) => key._field == \"name\", idx: 0)\n  \n\n\nfrom(bucket: \"hniu\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\n  |> filter(fn: (r) => r[\"area_id\"] == area.id)\n  |> filter(fn: (r) => r[\"room_id\"] !~ /^[a-zA-Z*]/)\n  |> filter(fn: (r) => r[\"_value\"] >= -10.0)\n  |> last()\n  |> group(columns: [\"_field\"])\n  |> fill(column: \"_value\", usePrevious: true)  \n  |> sum(column: \"_value\")",
           "refId": "楼栋总电费"
         },
         {
@@ -127,17 +303,8 @@
             "uid": "fw_r5ghVk"
           },
           "hide": false,
-          "query": "area=from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"area\")\n  |> filter(fn: (r) => r[\"_value\"] == \"${area}\")\n  |> unique(column: \"_value\")\n  |> findRecord(fn: (key) => key._field == \"name\", idx: 0)\n\nhouse=from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"house\")\n  |> filter(fn: (r) => r[\"area_id\"] == area.id)\n  |> filter(fn: (r) => r[\"_value\"] == \"${floor}\")\n  |> unique(column: \"id\")  \n  |> findRecord(fn: (key) => key._field == \"name\", idx: 0)  \n\nfrom(bucket: \"hniu\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\n  |> filter(fn: (r) => r[\"house_id\"] == house.id)\n  |> filter(fn: (r) => r[\"room_id\"] !~ /^[a-zA-Z*]/)\n  |> filter(fn: (r) => r[\"_value\"] >= -10.0)\n  |> fill(column: \"_value\", usePrevious: true)  \n  |> last()\n  |> group(columns: [\"_field\",\"_start\",\"_stop\"])\n  |> sum(column: \"_value\")",
+          "query": "area=from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: 2023-02-18T22:00:00Z)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"area\")\n  |> filter(fn: (r) => r[\"_value\"] == \"${area}\")\n  |> unique(column: \"_value\")\n  |> findRecord(fn: (key) => key._field == \"name\", idx: 0)\n\nhouse=from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: 2023-02-18T22:00:00Z)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"house\")\n  |> filter(fn: (r) => r[\"area_id\"] == area.id)\n  |> filter(fn: (r) => r[\"_value\"] == \"${floor}\")\n  |> unique(column: \"id\")  \n  |> findRecord(fn: (key) => key._field == \"name\", idx: 0)  \n\nfrom(bucket: \"hniu\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\n  |> filter(fn: (r) => r[\"house_id\"] == house.id)\n  |> filter(fn: (r) => r[\"room_id\"] !~ /^[a-zA-Z*]/)\n  |> filter(fn: (r) => r[\"_value\"] >= -10.0)\n  |> fill(column: \"_value\", usePrevious: true)  \n  |> last()\n  |> group(columns: [\"_field\",\"_start\",\"_stop\"])\n  |> sum(column: \"_value\")",
           "refId": "楼层总电费"
-        },
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "fw_r5ghVk"
-          },
-          "hide": false,
-          "query": "from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\n  |> filter(fn: (r) => r[\"room_id\"] !~ /^[a-zA-Z*]/)\n  |> filter(fn: (r) => r[\"_value\"] > 0)\n  |> last()\n  |> group(columns: [\"_field\"])\n  |> fill(column: \"_value\", usePrevious: true)  \n  |> sum(column: \"_value\")",
-          "refId": "全部楼栋电费"
         }
       ],
       "title": "${area} 电费信息",
@@ -175,7 +342,7 @@
         "h": 11,
         "w": 17,
         "x": 2,
-        "y": 0
+        "y": 5
       },
       "id": 6,
       "options": {
@@ -237,7 +404,7 @@
         "h": 11,
         "w": 5,
         "x": 19,
-        "y": 0
+        "y": 5
       },
       "id": 7,
       "options": {
@@ -261,7 +428,7 @@
             "type": "influxdb",
             "uid": "fw_r5ghVk"
           },
-          "query": "area=from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"area\")\n  |> filter(fn: (r) => r[\"_value\"] == \"${area}\")\n  |> unique(column: \"_value\")\n  |> findRecord(fn: (key) => key._field == \"name\", idx: 0)\n\nfrom(bucket: \"hniu\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\n  |> filter(fn: (r) => r[\"area_id\"] == area.id)\n  |> filter(fn: (r) => r[\"room_id\"] !~ /^[a-zA-Z*]/)\n  |> filter(fn: (r) => r[\"_value\"] < 0)\n  |> fill(column: \"_value\", usePrevious: true)  \n  |> unique(column: \"room_id\")\n  |> keep(columns: [\"_time\",\"room_id\",\"_value\"])\n",
+          "query": "area=from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: 2023-02-18T22:00:00Z)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"area\")\n  |> filter(fn: (r) => r[\"_value\"] == \"${area}\")\n  |> unique(column: \"_value\")\n  |> findRecord(fn: (key) => key._field == \"name\", idx: 0)\n\nfrom(bucket: \"hniu\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\n  |> filter(fn: (r) => r[\"area_id\"] == area.id)\n  |> filter(fn: (r) => r[\"room_id\"] !~ /^[a-zA-Z*]/)\n  |> filter(fn: (r) => r[\"_value\"] < 0)\n  |> fill(column: \"_value\", usePrevious: true)  \n  |> last()\n  |> unique(column: \"room_id\")\n  |> keep(columns: [\"_time\",\"room_id\",\"_value\"])\n",
           "refId": "A"
         }
       ],
@@ -326,13 +493,84 @@
           },
           "unit": "currencyJPY"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "10-601",
+                  "10-602",
+                  "10-603",
+                  "10-604",
+                  "10-605",
+                  "10-606",
+                  "10-607",
+                  "10-608",
+                  "10-609",
+                  "10-610",
+                  "10-612",
+                  "10-613",
+                  "10-614",
+                  "10-615",
+                  "10-616",
+                  "10-617",
+                  "10-618",
+                  "10-619",
+                  "10-620",
+                  "10-621",
+                  "10-622",
+                  "10-623",
+                  "10-624",
+                  "10-625",
+                  "10-626",
+                  "10-627",
+                  "10-628",
+                  "10-629",
+                  "10-630",
+                  "10-631",
+                  "10-632",
+                  "10-633",
+                  "10-634",
+                  "10-635",
+                  "10-636",
+                  "10-637",
+                  "10-638",
+                  "10-639",
+                  "10-640",
+                  "10-641",
+                  "10-642",
+                  "10-643",
+                  "10-644",
+                  "10-645",
+                  "10-646",
+                  "10-647",
+                  "10-648"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 11,
+        "h": 12,
         "w": 17,
         "x": 2,
-        "y": 11
+        "y": 16
       },
       "id": 8,
       "options": {
@@ -354,11 +592,109 @@
             "type": "influxdb",
             "uid": "fw_r5ghVk"
           },
-          "query": "area=from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"area\")\n  |> filter(fn: (r) => r[\"_value\"] == \"${area}\")\n  |> unique(column: \"_value\")\n  |> findRecord(fn: (key) => key._field == \"name\", idx: 0)\n\nhouse=from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"house\")\n  |> filter(fn: (r) => r[\"area_id\"] == area.id)\n  |> filter(fn: (r) => r[\"_value\"] == \"${floor}\")\n  |> unique(column: \"id\")  \n  |> findRecord(fn: (key) => key._field == \"name\", idx: 0)  \n\nfrom(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\n  |> filter(fn: (r) => r[\"house_id\"] == house.id)\n  |> filter(fn: (r) => r[\"room_id\"] !~ /^[a-zA-Z*]/)\n  |> filter(fn: (r) => r[\"_value\"] >= -10.0)\n  |> fill(column: \"_value\", usePrevious: true)  \n  |> keep(columns: [\"_time\",\"room_id\",\"_value\"])\n",
+          "query": "area=from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"area\")\n  |> filter(fn: (r) => r[\"_value\"] == \"${area}\")\n  |> unique(column: \"_value\")\n  |> findRecord(fn: (key) => key._field == \"name\", idx: 0)\n\nhouse=from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"house\")\n  |> filter(fn: (r) => r[\"area_id\"] == area.id)\n  |> filter(fn: (r) => r[\"_value\"] == \"${floor}\")\n  |> unique(column: \"id\")  \n  |> findRecord(fn: (key) => key._field == \"name\", idx: 0)  \n\nfrom(bucket: \"hniu\")\n  |> range(start: -30d)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\n  |> filter(fn: (r) => r[\"house_id\"] == house.id)\n  |> filter(fn: (r) => r[\"room_id\"] !~ /^[a-zA-Z*]/)\n  |> fill(column: \"_value\", usePrevious: true)  \n  |> keep(columns: [\"_time\",\"room_id\",\"_value\"])\n  |> timedMovingAverage(every: 4h, period: 4h)\n  \n",
           "refId": "A"
         }
       ],
       "title": "${floor} 电费总揽",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fw_r5ghVk"
+      },
+      "description": "前一天的用电平均 - 今天的用电平均\n数字代表前一天用电的费用\nTIP: 如果进行了电费充值，可能会不准确",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "noValue": "0.00",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyJPY"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 17,
+        "x": 2,
+        "y": 28
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "9.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "fw_r5ghVk"
+          },
+          "query": "area=from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"area\")\n  |> filter(fn: (r) => r[\"_value\"] == \"${area}\")\n  |> unique(column: \"_value\")\n  |> findRecord(fn: (key) => key._field == \"name\", idx: 0)\n\nhouse=from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"house\")\n  |> filter(fn: (r) => r[\"area_id\"] == area.id)\n  |> filter(fn: (r) => r[\"_value\"] == \"${floor}\")\n  |> unique(column: \"id\")  \n  |> findRecord(fn: (key) => key._field == \"name\", idx: 0)  \n\nfrom(bucket: \"hniu\")\n  |> range(start: -30d)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"daily\")\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\n  |> filter(fn: (r) => r[\"house_id\"] == house.id)\n  |> filter(fn: (r) => r[\"room_id\"] !~ /^[a-zA-Z*]/)\n  |> filter(fn: (r) => r[\"_value\"] >= 0)\n  |> fill(column: \"_value\", usePrevious: true)  \n  |> keep(columns: [\"_time\",\"room_id\",\"_value\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "${floor} 每日用电监控",
       "transformations": [],
       "type": "timeseries"
     },
@@ -393,7 +729,7 @@
         "h": 17,
         "w": 20,
         "x": 2,
-        "y": 22
+        "y": 39
       },
       "id": 9,
       "options": {
@@ -417,11 +753,11 @@
             "type": "influxdb",
             "uid": "fw_r5ghVk"
           },
-          "query": "from(bucket: \"hniu\")\n  |> range(start: 2023-02-11T22:00:00Z, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\n  |> filter(fn: (r) => r[\"_value\"] < 0)\n  |> fill(column: \"_value\", usePrevious: true)  \n  |> last()\n  |> keep(columns: [\"_time\",\"_value\",\"room_id\"])",
+          "query": "from(bucket: \"hniu\")\n  |> range(start: -3d)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"room\")\n  |> filter(fn: (r) => r[\"_field\"] == \"money\")\n  |> filter(fn: (r) => r[\"_value\"] < 0)\n  |> fill(column: \"_value\", usePrevious: true)  \n  |> last()\n  |> keep(columns: [\"_time\",\"_value\",\"room_id\"])",
           "refId": "A"
         }
       ],
-      "title": "全局欠费监控",
+      "title": "全部欠费楼栋",
       "transformations": [
         {
           "id": "filterFieldsByName",
@@ -435,7 +771,7 @@
       "type": "stat"
     }
   ],
-  "refresh": false,
+  "refresh": "5m",
   "schemaVersion": 37,
   "style": "dark",
   "tags": [],
@@ -443,9 +779,9 @@
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": "30号楼",
-          "value": "30号楼"
+          "selected": false,
+          "text": "10号楼",
+          "value": "10号楼"
         },
         "datasource": {
           "type": "influxdb",
@@ -492,13 +828,27 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-7d",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "hidden": false,
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
   "timezone": "",
   "title": "HNIU 电费监控",
   "uid": "REJwVtJVz",
-  "version": 29,
+  "version": 55,
   "weekStart": ""
 }
