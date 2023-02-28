@@ -16,6 +16,8 @@ _该脚本仅适用于 **HNIU** 校园一卡通服务_
 - [grafana 数据展示](docs/grafana.json)
 
 ![img](docs/img.png)
+![img2](docs/img_1.png)
+![img3](docs/img_2.png)
 ## 如何使用
 
 下载项目
