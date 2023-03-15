@@ -4,9 +4,9 @@ import os
 
 # 以下部分代码由 ChatGPT 生成
 # 12个楼栋，优先读取北八
-data = ["001005", "001001", "001002", "001003", "001004", "001006", "001007", "001008", "001009", "001010", "001011",
+data = ["001005", "001001", "001003", "001004", "001006", "001007", "001008", "001009", "001010", "001011",
         "001012"]
-output_interval = 1  # 输出间隔，单位为分钟
+output_interval = 5  # 输出间隔，单位为分钟
 output_size = 1  # 每次输出的数据量
 output_index = 0  # 记录已经输出的数据索引
 max_retries = 3  # 最大重试次数
@@ -74,7 +74,7 @@ def run_job():
     global retry_count
     # 每1分钟输出一次数据，直到所有数据输出完毕
     schedule.clear("output")
-    schedule.every(1).minutes.do(output_data, retry_count, max_retries).tag('output')
+    schedule.every(output_interval).minutes.do(output_data, retry_count, max_retries).tag('output')
 
 
 # 启动定时任务

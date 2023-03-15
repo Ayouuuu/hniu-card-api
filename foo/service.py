@@ -57,7 +57,7 @@ def auth_login(username: str = account[0], password: str = account[1]):
         "Upgrade-Insecure-Requests": "1",
         "Referer": "http://10.14.0.124/zytk35portal/default.aspx",
     }
-    session.post(url[4], headers=headers, data="__EVENTTARGET=UserLogin%24ImageButton1&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwUKMTc0MDQ4ODc3Nw9kFgICAQ9kFhICAw8WAh4HVmlzaWJsZWhkAgUPFgIfAGhkAgcPFgIfAGhkAgkPPCsACQEADxYEHghEYXRhS2V5cxYAHgtfIUl0ZW1Db3VudGZkZAIODzwrAAkBAA8WBB8BFgAfAmZkZAIQDzwrAAkBAA8WBB8BFgAfAmZkZAISDzwrAAkBAA8WBB8BFgAfAmZkZAIUDzwrAAkBAA8WBB8BFgAfAmZkZAIWDzwrAAkBAA8WBB8BFgAfAmZkZGT7t2PaAC71nhjomcWWlS2Kl%2FDh6Icnffmmf1QCBjcqOg%3D%3D&__VIEWSTATEGENERATOR=E655DDB2&__EVENTVALIDATION=%2FwEdAAmmkB23XPRc6QJjrAxJx7jUohjo8sIky4Xs%2BCUBsum%2BnL6pRh%2FvC3eYiguVzFy%2FtEYvT53BE9ULYNj8jfQiCQeC35ZbbeGbJddowj1pY7sNivrI0G85IvfKPX4CghIMZ1NJ4PbCb80KUDHFYYKXgFT9PjMyUg6NAZP4%2BvrIPkQUuFOdcKl43UA3HbIoQpEPelhEPm0OSqwYeIaEyD7zfAzjHEWZ1PjzcAqdQtFUyg1jBg%3D%3D&UserLogin%3AtxtUser=" + username + "&UserLogin%3AtxtPwd=" + password + "&UserLogin%3AddlPerson=%BF%A8%BB%A7&UserLogin%3AtxtSure=" + code[0])
+    session.post(url[4], headers=headers, data=("__EVENTTARGET=UserLogin%24ImageButton1&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwUKMTc0MDQ4ODc3Nw9kFgICAQ9kFhICAw8WAh4HVmlzaWJsZWhkAgUPFgIfAGhkAgcPFgIfAGhkAgkPPCsACQEADxYEHghEYXRhS2V5cxYAHgtfIUl0ZW1Db3VudGZkZAIODzwrAAkBAA8WBB8BFgAfAmZkZAIQDzwrAAkBAA8WBB8BFgAfAmZkZAISDzwrAAkBAA8WBB8BFgAfAmZkZAIUDzwrAAkBAA8WBB8BFgAfAmZkZAIWDzwrAAkBAA8WBB8BFgAfAmZkZGT7t2PaAC71nhjomcWWlS2Kl%2FDh6Icnffmmf1QCBjcqOg%3D%3D&__VIEWSTATEGENERATOR=E655DDB2&__EVENTVALIDATION=%2FwEdAAmmkB23XPRc6QJjrAxJx7jUohjo8sIky4Xs%2BCUBsum%2BnL6pRh%2FvC3eYiguVzFy%2FtEYvT53BE9ULYNj8jfQiCQeC35ZbbeGbJddowj1pY7sNivrI0G85IvfKPX4CghIMZ1NJ4PbCb80KUDHFYYKXgFT9PjMyUg6NAZP4%2BvrIPkQUuFOdcKl43UA3HbIoQpEPelhEPm0OSqwYeIaEyD7zfAzjHEWZ1PjzcAqdQtFUyg1jBg%3D%3D&UserLogin%3AtxtUser=" + username + "&UserLogin%3AtxtPwd=" + password + "&UserLogin%3AddlPerson=%BF%A8%BB%A7&UserLogin%3AtxtSure=" + code[0]).encode("utf-8"))
     info = get_user_info()
     return info
 
@@ -94,7 +94,7 @@ def get_houses(area_id: str):
     data = {
         "AreaId": area_id
     }
-    response = session.post(url[3], headers=headers, data=ujson.dumps(data))
+    response = session.post(url[3], headers=headers, data=ujson.dumps(data).encode("utf-8"))
     text = ujson.loads(response.text.replace(
         "new Ajax.Web.DataSet([new Ajax.Web.DataTable([[\"showvalue\",\"System.String\"],[\"showname\",\"System.String\"]],",
         "").replace(")]);/*", ""))
@@ -121,7 +121,7 @@ def get_rooms(area_id, house_id):
         "areaId": area_id,
         "HouseId": house_id
     }
-    response = session.post(url[3], headers=headers, data=ujson.dumps(data))
+    response = session.post(url[3], headers=headers, data=ujson.dumps(data).encode("utf-8"))
     text = ujson.loads(response.text.replace(
         "new Ajax.Web.DataSet([new Ajax.Web.DataTable([[\"MeterID\",\"System.Int32\"],[\"Remnant\",\"System.Decimal\"],[\"showname\",\"System.String\"],[\"room_id\",\"System.String\"]],",
         "").replace(")]);/*", ""))
@@ -150,6 +150,5 @@ def write_room(area_id: str):
             threading.Thread(target=write_point, args=(json.dumps(get_rooms(area_id, house['id'])),)).start()
             time.sleep(1)
         return {"code": 200, "message": "写入成功"}
-    except Exception as e:
-        return {"code": "500",
-                "message": "写入失败,请检查网络或者influxdb是否正常运行,以及电费网站是否可正常访问，如不能访问需要等待半小时或者更长！"}
+    except Exception:
+        return {"code": "500", "message": "写入失败,请检查网络或者influxdb是否正常运行,以及电费网站是否可正常访问，如不能访问需要等待半小时或者更长！"}
