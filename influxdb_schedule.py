@@ -49,6 +49,7 @@ def output_data(retry_count, max_retries):
             result = write_room(areas[0])
             if result['code'] != 200:
                 output_index -= output_size
+                print(result)
             if output_index == len(data):
                 output_index = 0
         else:

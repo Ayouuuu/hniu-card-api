@@ -7,6 +7,16 @@
 _该脚本仅适用于 **HNIU** 校园一卡通服务_   
 基于 **Python FastAPI** HNIU 校园一卡通 API 后端
 
+## 安装
+```bash
+# 安装依赖
+pip install -r requirement.txt
+# 配置  foo/influxdb.py influxdb2 配置
+#       foo/service.py 账号 密码
+# 开启数据爬取，默认 5分钟一次
+python influxdb_schedule.py
+```
+
 ## 程序功能
 
 - 获取用户信息

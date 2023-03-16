@@ -151,4 +151,4 @@ def write_room(area_id: str):
             time.sleep(1)
         return {"code": 200, "message": "写入成功"}
     except Exception:
-        return {"code": "500", "message": "写入失败,请检查网络或者influxdb是否正常运行,以及电费网站是否可正常访问，如不能访问需要等待半小时或者更长！"}
+        return {"code": 500, "message": "写入失败,请检查网络或者influxdb是否正常运行,以及电费网站是否可正常访问，如不能访问需要等待半小时或者更长！"}
